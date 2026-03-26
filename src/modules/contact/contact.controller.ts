@@ -1,7 +1,17 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
+import { ok } from 'src/common/utils/response';
 
 @Controller('contact')
 export class ContactController {
@@ -11,10 +21,7 @@ export class ContactController {
   async findAll() {
     const contacts = await this.contactService.findAll();
 
-    return {
-      message: 'Contacts retrieved successfully',
-      data: contacts,
-    };
+    return ok(contacts, 'Contacts retrieved successfully');
   }
 
   @Get(':id')
@@ -26,39 +33,30 @@ export class ContactController {
       };
     }
 
-    return {
-      message: 'Contact retrieved successfully',
-      data: contact,
-    };
+    return ok(contact, 'Contact retrieved successfully');
   }
 
   @Post()
-  async create(createContactDto: CreateContactDto) {
+  async create(@Body() createContactDto: CreateContactDto) {
     const user = await this.contactService.create(createContactDto);
 
-    return {
-      message: 'Contact created successfully',
-      data: user,
-    };
+    return ok(user, 'Contact created successfully');
   }
 
   @Put(':id')
-  async update(id: number, updateContactDto: UpdateContactDto) {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateContactDto: UpdateContactDto,
+  ) {
     const contact = await this.contactService.update(id, updateContactDto);
 
-    return {
-      message: 'Contact updated successfully',
-      data: contact,
-    };
+    return ok(contact, 'Contact updated successfully');
   }
 
   @Delete(':id')
-  remove(id: number) {
-    const contact = this.contactService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const contact = await this.contactService.remove(id);
 
-    return {
-      message: 'Contact deleted successfully',
-      data: contact,
-    };
+    return ok(contact, 'Contact deleted successfully');
   }
 }

@@ -10,9 +10,6 @@ export class CreateContactDto {
   @IsNotEmpty()
   phone!: string;
 
-  @IsString()
-  image_url?: string;
-
   @IsNumber()
   @IsNotEmpty()
   user_id!: number;
