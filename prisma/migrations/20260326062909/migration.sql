@@ -8,20 +8,21 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
-CREATE TABLE "Contact" (
+CREATE TABLE "contacts" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
     "user_id" INTEGER NOT NULL,
+    "alias" TEXT,
 
-    CONSTRAINT "Contact_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "contacts_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Contact_user_id_phone_key" ON "Contact"("user_id", "phone");
+CREATE UNIQUE INDEX "contacts_user_id_phone_key" ON "contacts"("user_id", "phone");
 
 -- AddForeignKey
-ALTER TABLE "Contact" ADD CONSTRAINT "Contact_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "contacts" ADD CONSTRAINT "contacts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
